@@ -16,6 +16,22 @@ Hugo-specific markup, while the source will be regular org-mode.
 The advantage gained from this is not having to litter non-org syntax
 in your org-mode source files.
 
+* Features
+
+** Sidenotes
+
+Footnotes are inlined to their location of reference and wrapped in
+~{{< sidenote >}}~ shortcodes.
+
+** Automatic publishing dates
+
+The ~#+DATE~ is set automatically to the date of exporting.
+
+** Relative links
+
+File links are wrapped in ~{{< ref "other-page.org" >}}~, so that Hugo
+inserts the correct link automatically when linking to another page.
+
 * Installation
 
 Just fetch it from MELPA.
@@ -50,3 +66,10 @@ There is also a customisation group called ~org-hugo-sidenotes-export~.
 
 Simply call ~org-export-dispatch~ and select the options relevant to
 you.
+
+* Alternatives
+
+[[https://github.com/kaushalmodi/ox-hugo][ox-hugo]] fills a similar niche, and is much more fully featured, but
+exports to Markdown instead of org-mode. Hugo is actually pretty good
+when it comes to handling org-mode, so I chose the path of least
+change.
