@@ -1,14 +1,17 @@
 #+TITLE: ox-org-hugo-sidenotes.el
 #+AUTHOR: Robin Schroer
 
-[[http://melpa.org/#/ox-org-hugo-sidenotes][file:http://melpa.org/packages/ox-org-hugo-sidenotes-badge.svg]]
-
 * Introduction
 
 This package is scratching a very particular itch of mine, so YMMV.
 
 It provides org-mode->org-mode export with slight modifications to
 allow for using a theme with [[https://edwardtufte.github.io/tufte-css/][Tufte]]-style sidenotes.
+
+The intended workflow is to maintain a directory of "clean" org files
+outside Hugo's ~content~ directory, and export a "dirty" version from
+there to Hugo's ~content~ directory. The dirty version will have
+Hugo-specific markup, while the source will be regular org-mode.
 
 The advantage gained from this is not having to litter non-org syntax
 in your org-mode source files.
