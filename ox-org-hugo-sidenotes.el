@@ -15,21 +15,42 @@
 
 ;;; Code:
 
+(defgroup org-hugo-sidenotes-export nil
+  "Options specific to the org-hugo-sidenotes export backend."
+  :tag "Org Export Hugo Sidenotes"
+  :group 'org-export
+  :version "25.2"
+  :package-version '(ox-org-hugo-sidenotes . "0.1"))
+
+(defcustom ox-org-hugo-sidenotes-add-date t
+  "Automatically add the date header."
+  :tag "Add date header to org-hugo-sidenotes exports"
+  :group 'org-hugo-sidenotes-export
+  :type 'boolean)
+
+(defcustom ox-org-hugo-sidenotes-export-path ""
+  "Where to export files to."
+  :tag "org-hugo-sidenotes export path"
+  :group 'org-hugo-sidenotes-export
+  :type 'directory)
+
 (org-export-define-derived-backend 'org-sidenotes 'org
-  :translate-alist '((footnote-reference . ox-org-sidenotes-footnote-reference)
-                     (link . ox-org-sidenotes-link)
+  :translate-alist '((footnote-reference . ox-org-hugo-sidenotes-footnote-reference)
+                     (link . ox-org-hugo-sidenotes-link)
                      (section . org-org-identity)
-                     (template . ox-org-sidenotes-template))
+                     (template . ox-org-hugo-sidenotes-template))
+  :options-alist '((add-date nil nil ox-org-hugo-sidenotes-add-date)
+                   (export-path nil nil ox-org-hugo-sidenotes-export-path))
   :menu-entry
   '(?O "Export to Org-sidenotes"
-       ((?s "As Tufte buffer" ox-org-sidenotes-export-to-buffer)
-        (?S "As Tufte file" ox-org-sidenotes-export-to-file))))
+       ((?s "As Tufte file" ox-org-hugo-sidenotes-export-to-file)
+        (?S "As Tufte buffer" ox-org-hugo-sidenotes-export-to-buffer))))
 
-(defun ox-org-sidenotes--timestamp ()
+(defun ox-org-hugo-sidenotes--timestamp ()
   "Return a YYYY-MM-DD timestamp of the current date."
   (format-time-string "%Y-%m-%d" (current-time)))
 
-(defun ox-org-sidenotes-link
+(defun ox-org-hugo-sidenotes-link
     (link contents info)
   "Convert file links to relative Hugo links."
   (let ((type (org-element-property :type link))
@@ -40,15 +61,16 @@
                 contents)
       (org-org-link link contents info))))
 
-(defun ox-org-sidenotes-template
+(defun ox-org-hugo-sidenotes-template
     (contents info)
     "Insert the current date as timestamp and removes the creation
 timestamp from the file."
   (concat
-   (format "#+DATE: %s\n" (ox-org-sidenotes--timestamp))
+   (when ox-org-hugo-sidenotes-add-date
+     (format "#+DATE: %s\n" (ox-org-hugo-sidenotes--timestamp)))
    (org-org-template contents (plist-put info :time-stamp-file nil))))
 
-(defun ox-org-sidenotes-footnote-reference
+(defun ox-org-hugo-sidenotes-footnote-reference
     (footnote-reference contents info)
   "Insert the footnote definition in place using the sidenote
 shortcode."
@@ -58,7 +80,7 @@ shortcode."
             (org-trim (org-export-data paragraph info)))))
 
 ;;;###autoload
-(defun ox-org-sidenotes-export-to-buffer
+(defun ox-org-hugo-sidenotes-export-to-buffer
     (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer as Tufte Org buffer.
 
@@ -88,7 +110,7 @@ settings."
     async subtreep visible-only body-only ext-plist))
 
 ;;;###autoload
-(defun ox-org-sidenotes-export-to-file
+(defun ox-org-hugo-sidenotes-export-to-file
     (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer as Tufte Org file.
 
@@ -115,7 +137,8 @@ overriding Org default settings, but still inferior to file-local
 settings."
   (interactive)
   (org-export-to-file 'org-sidenotes
-      (format "content/posts/%s.org"
+      (format "%s/%s.org"
+              ox-org-hugo-sidenotes-export-path
               (let ((title (car (plist-get (org-export-get-environment) ':title))))
                 (replace-regexp-in-string
                  (rx (one-or-more blank))
@@ -123,6 +146,6 @@ settings."
                  (downcase title))))
     async subtreep visible-only body-only ext-plist))
 
-(provide 'ox-org-sidenotes)
+(provide 'ox-org-hugo-sidenotes)
 
-;;; ox-org-sidenotes.el ends here
+;;; ox-org-hugo-sidenotes.el ends here

@@ -13,6 +13,37 @@ allow for using a theme with [[https://edwardtufte.github.io/tufte-css/][Tufte]]
 The advantage gained from this is not having to litter non-org syntax
 in your org-mode source files.
 
+* Installation
+
+Just fetch it from MELPA.
+
+#+begin_src emacs-lisp
+;; package.el
+(package-install 'ox-org-hugo-sidenotes)
+
+;; use-package
+(use-package ox-org-hugo-sidenotes
+  :ensure t)
+
+;; straight
+(straight-use-package 'ox-org-hugo-sidenotes)
+#+end_src
+
 * Configuration
 
-TBD
+Here is the set of settings with their default values:
+
+#+begin_src emacs-lisp
+(setq
+ ;; Add the date header automatically
+ ox-org-hugo-sidenotes-add-date t
+ ;; File export path
+ ox-org-hugo-sidenotes-export-path "")
+#+end_src
+
+There is also a customisation group called ~org-hugo-sidenotes-export~.
+
+* Usage
+
+Simply call ~org-export-dispatch~ and select the options relevant to
+you.
