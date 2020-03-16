@@ -89,7 +89,7 @@
     "Insert the current date as timestamp and removes the creation
 timestamp from the file."
   (concat
-   (when (plist-get (org-export-get-environment) ':ox-org-hugo-sidenotes-add-date)
+   (when (plist-get info :ox-org-hugo-sidenotes-add-date)
      (format "#+DATE: %s\n" (ox-org-hugo-sidenotes--timestamp)))
    (org-org-template contents (plist-put info :time-stamp-file nil))))
 
@@ -162,7 +162,7 @@ settings."
   (org-export-to-file 'org-hugo-sidenotes
       (format "%s/%s.org"
               ox-org-hugo-sidenotes-export-path
-              (let ((title (car (plist-get (org-export-get-environment) ':title))))
+              (let ((title (car (plist-get (org-export-get-environment) :title))))
                 (replace-regexp-in-string
                  (rx (one-or-more blank))
                  "-"
