@@ -57,7 +57,7 @@
   :group 'org-hugo-sidenotes-export
   :type 'directory)
 
-(org-export-define-derived-backend 'org-sidenotes 'org
+(org-export-define-derived-backend 'org-hugo-sidenotes 'org
   :translate-alist '((footnote-reference . ox-org-hugo-sidenotes-footnote-reference)
                      (link . ox-org-hugo-sidenotes-link)
                      (section . org-org-identity)
@@ -89,7 +89,7 @@
     "Insert the current date as timestamp and removes the creation
 timestamp from the file."
   (concat
-   (when ox-org-hugo-sidenotes-add-date
+   (when (plist-get (org-export-get-environment) ':ox-org-hugo-sidenotes-add-date)
      (format "#+DATE: %s\n" (ox-org-hugo-sidenotes--timestamp)))
    (org-org-template contents (plist-put info :time-stamp-file nil))))
 
@@ -129,7 +129,7 @@ EXT-PLIST, when provided, is a property list with external parameters
 overriding Org default settings, but still inferior to file-local
 settings."
   (interactive)
-  (org-export-to-buffer 'org-sidenotes "*Org Tufte Export*"
+  (org-export-to-buffer 'org-hugo-sidenotes "*Org Tufte Export*"
     async subtreep visible-only body-only ext-plist))
 
 ;;;###autoload
@@ -159,7 +159,7 @@ EXT-PLIST, when provided, is a property list with external parameters
 overriding Org default settings, but still inferior to file-local
 settings."
   (interactive)
-  (org-export-to-file 'org-sidenotes
+  (org-export-to-file 'org-hugo-sidenotes
       (format "%s/%s.org"
               ox-org-hugo-sidenotes-export-path
               (let ((title (car (plist-get (org-export-get-environment) ':title))))
