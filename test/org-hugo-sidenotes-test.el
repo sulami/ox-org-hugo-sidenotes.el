@@ -22,7 +22,7 @@
 (ert-deftest org-hugo-sidenotes-test/add-date ()
   (let ((input "* Headline\n"))
     (should (equal (format "#+DATE: %s\n%s"
-                           (ox-org-sidenotes--timestamp)
+                           (ox-org-hugo-sidenotes--timestamp)
                            input)
                    (convert input
                             (append default-options
