@@ -6,13 +6,15 @@ jobs:
       - image: silex/emacs:26-alpine
     steps:
       - checkout
-      - run: |
-          emacs --version
-          emacs -q \
-            --batch \
-            -l ox-org-hugo-sidenotes.el \
-            -l test/org-hugo-sidenotes-test.el \
-            -f ert-run-tests-batch-and-exit
+      - run:
+          name: Run tests
+          command: |
+            emacs --version
+            emacs -q \
+              --batch \
+              -l ox-org-hugo-sidenotes.el \
+              -l test/org-hugo-sidenotes-test.el \
+              -f ert-run-tests-batch-and-exit
 
 workflows:
   tests:

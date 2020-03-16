@@ -1,6 +1,8 @@
 #+TITLE: ox-org-hugo-sidenotes.el
 #+AUTHOR: Robin Schroer
 
+[[https://circleci.com/gh/sulami/ox-org-hugo-sidenotes.el][file:https://circleci.com/gh/sulami/ox-org-hugo-sidenotes.el.svg?style=svg]]
+
 * Introduction
 
 This package is scratching a very particular itch of mine, so YMMV.
