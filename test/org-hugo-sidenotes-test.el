@@ -17,7 +17,7 @@
     (should (equal input
                    (convert input
                             (append default-options
-                                    '(:ox-org-hugo-sidenotes-add-date nil)))))))
+                                    '(:add-current-date nil)))))))
 
 (ert-deftest org-hugo-sidenotes-test/add-date ()
   (let ((input "* Headline\n"))
@@ -26,7 +26,7 @@
                            input)
                    (convert input
                             (append default-options
-                                    '(:ox-org-hugo-sidenotes-add-date t)))))))
+                                    '(:add-current-date t)))))))
 
 (ert-deftest org-hugo-sidenotes-test/inline-sidenote ()
   (let* ((reference "[fn:1]")
@@ -36,7 +36,7 @@
     (should (equal after
                    (convert before
                             (append default-options
-                                    '(:ox-org-hugo-sidenotes-add-date nil)))))))
+                                    '(:add-current-date nil)))))))
 
 (ert-deftest org-hugo-sidenotes-test/absolute-file-links ()
   (let* ((text "a link")
@@ -46,7 +46,7 @@
     (should (equal after
                    (convert before
                             (append default-options
-                                    '(:ox-org-hugo-sidenotes-add-date nil)))))))
+                                    '(:add-current-date nil)))))))
 
 (ert-deftest org-hugo-sidenotes-test/relative-file-links ()
   (let* ((text "a link")
@@ -56,7 +56,7 @@
     (should (equal after
                    (convert before
                             (append default-options
-                                    '(:ox-org-hugo-sidenotes-add-date nil)))))))
+                                    '(:add-current-date nil)))))))
 
 (ert-deftest org-hugo-sidenotes-test/file-file-links ()
   (let* ((text "a link")
@@ -66,7 +66,7 @@
     (should (equal after
                    (convert before
                             (append default-options
-                                    '(:ox-org-hugo-sidenotes-add-date nil)))))))
+                                    '(:add-current-date nil)))))))
 
 (ert-deftest org-hugo-sidenotes-test/non-file-links ()
   (let* ((text "a link")
@@ -76,4 +76,4 @@
     (should (equal after
                    (convert before
                             (append default-options
-                                    '(:ox-org-hugo-sidenotes-add-date nil)))))))
+                                    '(:add-current-date nil)))))))

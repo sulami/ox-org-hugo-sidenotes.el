@@ -59,8 +59,8 @@ Here is the set of settings with their default values:
 #+begin_src emacs-lisp
 (setq
  ;; Add the date header automatically
- ox-org-hugo-sidenotes-add-date t
- ;; File export path
+ ox-org-hugo-sidenotes-add-current-date t
+ ;; File export path. MUST bet set.
  ox-org-hugo-sidenotes-export-path "")
 #+end_src
 

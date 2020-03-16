@@ -45,7 +45,7 @@
   :version "25.2"
   :package-version '(ox-org-hugo-sidenotes . "0.1"))
 
-(defcustom ox-org-hugo-sidenotes-add-date t
+(defcustom ox-org-hugo-sidenotes-add-current-date t
   "Automatically add the date header."
   :tag "Add date header to org-hugo-sidenotes exports"
   :group 'org-hugo-sidenotes-export
@@ -62,8 +62,8 @@
                      (link . ox-org-hugo-sidenotes-link)
                      (section . org-org-identity)
                      (template . ox-org-hugo-sidenotes-template))
-  :options-alist '((add-date nil nil ox-org-hugo-sidenotes-add-date)
-                   (export-path nil nil ox-org-hugo-sidenotes-export-path))
+  :options-alist '((:add-current-date nil nil ox-org-hugo-sidenotes-add-current-date)
+                   (:export-path nil nil ox-org-hugo-sidenotes-export-path))
   :menu-entry
   '(?O "Export to Org-sidenotes"
        ((?s "As Tufte file" ox-org-hugo-sidenotes-export-to-file)
@@ -89,7 +89,7 @@
     "Insert the current date as timestamp and removes the creation
 timestamp from the file."
   (concat
-   (when (plist-get info :ox-org-hugo-sidenotes-add-date)
+   (when (plist-get info :add-current-date)
      (format "#+DATE: %s\n" (ox-org-hugo-sidenotes--timestamp)))
    (org-org-template contents (plist-put info :time-stamp-file nil))))
 
@@ -159,15 +159,17 @@ EXT-PLIST, when provided, is a property list with external parameters
 overriding Org default settings, but still inferior to file-local
 settings."
   (interactive)
-  (org-export-to-file 'org-hugo-sidenotes
-      (format "%s/%s.org"
-              ox-org-hugo-sidenotes-export-path
-              (let ((title (car (plist-get (org-export-get-environment) :title))))
-                (replace-regexp-in-string
-                 (rx (one-or-more blank))
-                 "-"
-                 (downcase title))))
-    async subtreep visible-only body-only ext-plist))
+  (if (s-blank? ox-org-hugo-sidenotes-export-path)
+      (error "Required setting ox-org-hugo-sidenotes-export-path is not set")
+    (org-export-to-file 'org-hugo-sidenotes
+        (format "%s/%s.org"
+                ox-org-hugo-sidenotes-export-path
+                (let ((title (car (plist-get (org-export-get-environment) :title))))
+                  (replace-regexp-in-string
+                   (rx (one-or-more blank))
+                   "-"
+                   (downcase title))))
+      async subtreep visible-only body-only ext-plist)))
 
 (provide 'ox-org-hugo-sidenotes)
 
