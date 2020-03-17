@@ -45,6 +45,18 @@
   :version "25.2"
   :package-version '(ox-org-hugo-sidenotes . "0.1"))
 
+(defcustom ox-org-hugo-sidenotes-use-sidenotes t
+  "Convert footnotes to sidenotes?"
+  :tag "Whether to convert footnotes to sidenotes"
+  :group 'org-hugo-sidenotes-export
+  :type 'booleal)
+
+(defcustom ox-org-hugo-sidenotes-sidenote-shortcode "sidenote"
+  "Shortcode to use for sidenotes."
+  :tag "Shortcode to use for sidenotes"
+  :group 'org-hugo-sidenotes-export
+  :type 'string)
+
 (defcustom ox-org-hugo-sidenotes-add-current-date t
   "Automatically add the date header."
   :tag "Add date header to org-hugo-sidenotes exports"
@@ -60,10 +72,12 @@
 (org-export-define-derived-backend 'org-hugo-sidenotes 'org
   :translate-alist '((footnote-reference . ox-org-hugo-sidenotes-footnote-reference)
                      (link . ox-org-hugo-sidenotes-link)
-                     (section . org-org-identity)
+                     (section . ox-org-hugo-sidenotes-section)
                      (template . ox-org-hugo-sidenotes-template))
   :options-alist '((:add-current-date nil nil ox-org-hugo-sidenotes-add-current-date)
-                   (:export-path nil nil ox-org-hugo-sidenotes-export-path))
+                   (:export-path nil nil ox-org-hugo-sidenotes-export-path)
+                   (:use-sidenotes nil nil ox-org-hugo-sidenotes-use-sidenotes)
+                   (:sidenote-shortcode nil nil ox-org-hugo-sidenotes-sidenote-shortcode))
   :menu-entry
   '(?O "Export to Org-sidenotes"
        ((?s "As Tufte file" ox-org-hugo-sidenotes-export-to-file)
@@ -72,6 +86,14 @@
 (defun ox-org-hugo-sidenotes--timestamp ()
   "Return a YYYY-MM-DD timestamp of the current date."
   (format-time-string "%Y-%m-%d" (current-time)))
+
+(defun ox-org-hugo-sidenotes-section
+    (section contents info)
+  "Export a section. With sidenotes, just use identity, without, call
+through to `org-org-section', which attaches the footnote section."
+  (if (plist-get info :use-sidenotes)
+      (org-org-identity section contents info)
+    (org-org-section section contents info)))
 
 (defun ox-org-hugo-sidenotes-link
     (link contents info)
@@ -97,10 +119,15 @@ timestamp from the file."
     (footnote-reference contents info)
   "Insert the footnote definition in place using the sidenote
 shortcode."
-  (format "{{< sidenote id=\"%s\" >}}%s{{</ sidenote >}}"
-          (org-export-get-footnote-number footnote-reference info)
-          (let ((paragraph (org-export-get-footnote-definition footnote-reference info)))
-            (org-trim (org-export-data paragraph info)))))
+  (if (plist-get info :use-sidenotes)
+      (let ((shortcode (plist-get info :sidenote-shortcode))
+            (paragraph (org-export-get-footnote-definition footnote-reference info)))
+        (format "{{< %s id=\"%s\" >}}%s{{</ %s >}}"
+                shortcode
+                (org-export-get-footnote-number footnote-reference info)
+                (org-trim (org-export-data paragraph info))
+                shortcode))
+    (org-org-identity footnote-reference contents info)))
 
 ;;;###autoload
 (defun ox-org-hugo-sidenotes-export-to-buffer

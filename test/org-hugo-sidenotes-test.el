@@ -38,6 +38,31 @@
                             (append default-options
                                     '(:add-current-date nil)))))))
 
+(ert-deftest org-hugo-sidenotes-test/sidenote-shortcode ()
+  (let* ((shortcode "marginnote")
+         (reference "[fn:1]")
+         (footnote "Footnote text")
+         (before (format "Some text%s\n\n%s %s" reference reference footnote))
+         (after (format "Some text{{< %s id=\"1\" >}}%s{{</ %s >}}\n"
+                        shortcode
+                        footnote
+                        shortcode)))
+    (should (equal after
+                   (convert before
+                            (append default-options
+                                    '(:add-current-date nil
+                                      :sidenote-shortcode "marginnote")))))))
+
+(ert-deftest org-hugo-sidenotes-test/disable-sidenotes ()
+  (let* ((reference "[fn:1]")
+         (footnote "Footnote text")
+         (before (format "Some text%s\n\n%s %s\n" reference reference footnote)))
+    (should (equal before
+                   (convert before
+                            (append default-options
+                                    '(:add-current-date nil
+                                      :use-sidenotes nil)))))))
+
 (ert-deftest org-hugo-sidenotes-test/absolute-file-links ()
   (let* ((text "a link")
          (target "/foo/bar.org")

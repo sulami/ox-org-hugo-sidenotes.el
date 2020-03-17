@@ -23,7 +23,7 @@ in your org-mode source files.
 ** Sidenotes
 
 Footnotes are inlined to their location of reference and wrapped in
-~{{< sidenote >}}~ shortcodes.
+~{{< sidenote id="42" >}}~ shortcodes.
 
 ** Automatic publishing dates
 
@@ -58,6 +58,10 @@ Here is the set of settings with their default values:
 
 #+begin_src emacs-lisp
 (setq
+ ;; Convert footnotes to sidenotes
+ ox-org-hugo-sidenotes-use-sidenotes t
+ ;; Shortcode to use for sidenotes
+ ox-org-hugo-sidenotes-sidenote-shortcode "sidenote"
  ;; Add the date header automatically
  ox-org-hugo-sidenotes-add-current-date t
  ;; File export path. MUST bet set.
@@ -66,8 +70,8 @@ Here is the set of settings with their default values:
 
 There is also a customisation group called ~org-hugo-sidenotes-export~.
 
-*Important*: Because this exporter inherits from ~ox-org~, most of the ~ox-org~
-settings also apply, such as ~with-author~.
+*Important*: Because this exporter inherits from ~ox-org~, most of the
+~ox-org~ settings also apply, such as ~with-author~.
 
 * Usage
 
