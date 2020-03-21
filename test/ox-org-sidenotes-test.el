@@ -1,6 +1,6 @@
 (require 'ert)
 (require 'ox)
-(require 'ox-org-hugo-sidenotes)
+(require 'ox-org-sidenotes)
 
 (defvar-local default-options
   '(:with-title nil
@@ -8,27 +8,27 @@
 
 (defun convert (string &optional options)
   (org-export-string-as string
-                        'org-hugo-sidenotes
+                        'org-sidenotes
                         nil
                         options))
 
-(ert-deftest org-hugo-sidenotes-test/identity ()
+(ert-deftest org-sidenotes-test/identity ()
   (let ((input "* Headline\n"))
     (should (equal input
                    (convert input
                             (append default-options
                                     '(:add-current-date nil)))))))
 
-(ert-deftest org-hugo-sidenotes-test/add-date ()
+(ert-deftest org-sidenotes-test/add-date ()
   (let ((input "* Headline\n"))
     (should (equal (format "#+DATE: %s\n%s"
-                           (ox-org-hugo-sidenotes--timestamp)
+                           (ox-org-sidenotes--timestamp)
                            input)
                    (convert input
                             (append default-options
                                     '(:add-current-date t)))))))
 
-(ert-deftest org-hugo-sidenotes-test/inline-sidenote ()
+(ert-deftest org-sidenotes-test/inline-sidenote ()
   (let* ((reference "[fn:1]")
          (footnote "Footnote text")
          (before (format "Some text%s\n\n%s %s" reference reference footnote))
@@ -39,7 +39,7 @@
                                     '(:add-current-date nil
                                       :use-sidenotes t)))))))
 
-(ert-deftest org-hugo-sidenotes-test/sidenote-shortcode ()
+(ert-deftest org-sidenotes-test/sidenote-shortcode ()
   (let* ((shortcode "marginnote")
          (reference "[fn:1]")
          (footnote "Footnote text")
@@ -55,7 +55,7 @@
                                       :use-sidenotes t
                                       :sidenote-shortcode "marginnote")))))))
 
-(ert-deftest org-hugo-sidenotes-test/disable-sidenotes ()
+(ert-deftest org-sidenotes-test/disable-sidenotes ()
   (let* ((reference "[fn:1]")
          (footnote "Footnote text")
          (before (format "Some text%s\n\n%s %s\n" reference reference footnote)))
@@ -65,7 +65,7 @@
                                     '(:add-current-date nil
                                       :use-sidenotes nil)))))))
 
-(ert-deftest org-hugo-sidenotes-test/absolute-file-links ()
+(ert-deftest org-sidenotes-test/absolute-file-links ()
   (let* ((text "a link")
          (target "/foo/bar.org")
          (before (format "[[%s][%s]]" target text))
@@ -75,7 +75,7 @@
                             (append default-options
                                     '(:add-current-date nil)))))))
 
-(ert-deftest org-hugo-sidenotes-test/relative-file-links ()
+(ert-deftest org-sidenotes-test/relative-file-links ()
   (let* ((text "a link")
          (target "./foo/bar.org")
          (before (format "[[%s][%s]]" target text))
@@ -85,7 +85,7 @@
                             (append default-options
                                     '(:add-current-date nil)))))))
 
-(ert-deftest org-hugo-sidenotes-test/file-file-links ()
+(ert-deftest org-sidenotes-test/file-file-links ()
   (let* ((text "a link")
          (target "bar.org")
          (before (format "[[file:%s][%s]]" target text))
@@ -95,7 +95,7 @@
                             (append default-options
                                     '(:add-current-date nil)))))))
 
-(ert-deftest org-hugo-sidenotes-test/non-file-links ()
+(ert-deftest org-sidenotes-test/non-file-links ()
   (let* ((text "a link")
          (target "https://example.com")
          (before (format "[[%s][%s]]" target text))

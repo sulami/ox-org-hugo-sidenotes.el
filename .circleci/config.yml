@@ -12,8 +12,8 @@ jobs:
             emacs --version
             emacs -q \
               --batch \
-              -l ox-org-hugo-sidenotes.el \
-              -l test/org-hugo-sidenotes-test.el \
+              -l ox-org-sidenotes.el \
+              -l test/ox-org-sidenotes-test.el \
               -f ert-run-tests-batch-and-exit
 
 workflows:

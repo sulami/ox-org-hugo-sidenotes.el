@@ -1,19 +1,21 @@
-#+TITLE: ox-org-hugo-sidenotes.el
+#+TITLE: ox-org-sidenotes.el
 #+AUTHOR: Robin Schroer
 
-[[https://circleci.com/gh/sulami/ox-org-hugo-sidenotes.el][file:https://circleci.com/gh/sulami/ox-org-hugo-sidenotes.el.svg?style=svg]]
+[[https://circleci.com/gh/sulami/ox-org-sidenotes.el][file:https://circleci.com/gh/sulami/ox-org-sidenotes.el.svg?style=svg]]
 
 * Introduction
 
 This package is scratching a very particular itch of mine, so YMMV.
 
 It provides org-mode->org-mode export with slight modifications to
-allow for using a theme with [[https://edwardtufte.github.io/tufte-css/][Tufte]]-style sidenotes.
+allow for using [[https://edwardtufte.github.io/tufte-css/][Tufte]]-style sidenotes. The original use-case was Hugo,
+but it can be adapted to any templating system via configuration.
 
 The intended workflow is to maintain a directory of "clean" org files
-outside Hugo's ~content~ directory, and export a "dirty" version from
-there to Hugo's ~content~ directory. The dirty version will have
-Hugo-specific markup, while the source will be regular org-mode.
+outside your static site generators content directory, and export an
+adapted version to the content directory. This "dirty" version will
+have generator-specific markup, while the source will be regular
+org-mode.
 
 The advantage gained from this is not having to litter non-org syntax
 in your org-mode source files.
@@ -40,14 +42,14 @@ Just fetch it from MELPA.
 
 #+begin_src emacs-lisp
 ;; package.el
-(package-install 'ox-org-hugo-sidenotes)
+(package-install 'ox-org-sidenotes)
 
 ;; use-package
-(use-package ox-org-hugo-sidenotes
+(use-package ox-org-sidenotes
   :ensure t)
 
 ;; straight
-(straight-use-package 'ox-org-hugo-sidenotes)
+(straight-use-package 'ox-org--sidenotes)
 #+end_src
 
 Or clone this repository and load in the file by hand.
@@ -59,16 +61,16 @@ Here is the set of settings with their default values:
 #+begin_src emacs-lisp
 (setq
  ;; Convert footnotes to sidenotes
- ox-org-hugo-sidenotes-use-sidenotes nil
+ ox-org-sidenotes-use-sidenotes nil
  ;; Shortcode to use for sidenotes
- ox-org-hugo-sidenotes-sidenote-shortcode "sidenote"
+ ox-org-sidenotes-sidenote-shortcode "sidenote"
  ;; Add the date header automatically
- ox-org-hugo-sidenotes-add-current-date t
+ ox-org-sidenotes-add-current-date t
  ;; File export path. MUST bet set.
- ox-org-hugo-sidenotes-export-path "")
+ ox-org-sidenotes-export-path "")
 #+end_src
 
-There is also a customisation group called ~org-hugo-sidenotes-export~.
+There is also a customisation group called ~org-sidenotes-export~.
 
 *Important*: Because this exporter inherits from ~ox-org~, most of the
 ~ox-org~ settings also apply, such as ~with-author~.
