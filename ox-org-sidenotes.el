@@ -45,6 +45,12 @@
   :version "25.2"
   :package-version '(ox-org-sidenotes . "0.1"))
 
+(defcustom ox-org-sidenotes-convert-metadata nil
+  "Convert metadata to Jekyll-/YAML-format"
+  :tag "Convert metadata to Jekyll-/YAML-format"
+  :group 'org-sidenotes-convert-metadata
+  :type 'boolean)
+
 (defcustom ox-org-sidenotes-use-sidenotes nil
   "Convert footnotes to sidenotes?"
   :tag "Whether to convert footnotes to sidenotes"
@@ -74,7 +80,8 @@
                      (link . ox-org-sidenotes-link)
                      (section . ox-org-sidenotes-section)
                      (template . ox-org-sidenotes-template))
-  :options-alist '((:add-current-date nil nil ox-org-sidenotes-add-current-date)
+  :options-alist '((:convert-metadata nil nil ox-org-sidenotes-convert-metadata)
+                   (:add-current-date nil nil ox-org-sidenotes-add-current-date)
                    (:export-path nil nil ox-org-sidenotes-export-path)
                    (:use-sidenotes nil nil ox-org-sidenotes-use-sidenotes)
                    (:sidenote-shortcode nil nil ox-org-sidenotes-sidenote-shortcode))
@@ -106,14 +113,29 @@ through to `org-org-section', which attaches the footnote section."
                 contents)
       (org-org-link link contents info))))
 
+(defun ox-org-sidenotes--convert-metadata
+    (s)
+  "This is required beause Emacs Lisp has no good way of applying a
+  function to groups of a regexp match."
+  (replace-regexp-in-string
+   "#\\+.+:.+"
+   (lambda (match)
+     (let ((name (replace-regexp-in-string "#\\+\\(.+\\):.+" "\\1" match))
+           (value (replace-regexp-in-string ".+:\\(.+\\)" "\\1" match)))
+       (format "%s:%s" (downcase name) value)))
+   s))
+
 (defun ox-org-sidenotes-template
     (contents info)
-    "Insert the current date as timestamp and removes the creation
+  "Insert the current date as timestamp and removes the creation
 timestamp from the file."
-  (concat
-   (when (plist-get info :add-current-date)
-     (format "#+DATE: %s\n" (ox-org-sidenotes--timestamp)))
-   (org-org-template contents (plist-put info :time-stamp-file nil))))
+  (let ((org-format (concat
+                     (when (plist-get info :add-current-date)
+                       (format "#+DATE: %s\n" (ox-org-sidenotes--timestamp)))
+                     (org-org-template contents (plist-put info :time-stamp-file nil)))))
+    (if (plist-get info :convert-metadata)
+        (ox-org-sidenotes--convert-metadata org-format)
+      org-format)))
 
 (defun ox-org-sidenotes-footnote-reference
     (footnote-reference contents info)

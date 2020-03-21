@@ -22,6 +22,21 @@ in your org-mode source files.
 
 * Features
 
+** Convert Metadata To Jekyll/YAML format
+
+Some static site generators (like [[https://jaspervdj.be/hakyll/][Hakyll]]) cannot parse org-mode
+metadata, so this exporter can automatically convert it to the Jekyll
+format:
+
+#+begin_src yaml
+---
+title: This is a page
+date: 2020-02-02
+author: Bloggy McBlogface
+tags: [cool, stuff]
+---
+#+end_src
+
 ** Sidenotes
 
 Footnotes are inlined to their location of reference and wrapped in
@@ -60,6 +75,8 @@ Here is the set of settings with their default values:
 
 #+begin_src emacs-lisp
 (setq
+ ;; Convert metadata to YAML
+ ox-org-sidenotes-convert-metadata nil
  ;; Convert footnotes to sidenotes
  ox-org-sidenotes-use-sidenotes nil
  ;; Shortcode to use for sidenotes
@@ -86,3 +103,5 @@ you.
 exports to Markdown instead of org-mode. Hugo is actually pretty good
 when it comes to handling org-mode, so I chose the path of least
 change.
+
+ox-jekyll does so as well.
