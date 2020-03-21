@@ -45,11 +45,11 @@
   :version "25.2"
   :package-version '(ox-org-hugo-sidenotes . "0.1"))
 
-(defcustom ox-org-hugo-sidenotes-use-sidenotes t
+(defcustom ox-org-hugo-sidenotes-use-sidenotes nil
   "Convert footnotes to sidenotes?"
   :tag "Whether to convert footnotes to sidenotes"
   :group 'org-hugo-sidenotes-export
-  :type 'booleal)
+  :type 'boolean)
 
 (defcustom ox-org-hugo-sidenotes-sidenote-shortcode "sidenote"
   "Shortcode to use for sidenotes."

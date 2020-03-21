@@ -59,7 +59,7 @@ Here is the set of settings with their default values:
 #+begin_src emacs-lisp
 (setq
  ;; Convert footnotes to sidenotes
- ox-org-hugo-sidenotes-use-sidenotes t
+ ox-org-hugo-sidenotes-use-sidenotes nil
  ;; Shortcode to use for sidenotes
  ox-org-hugo-sidenotes-sidenote-shortcode "sidenote"
  ;; Add the date header automatically

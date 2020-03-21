@@ -36,7 +36,8 @@
     (should (equal after
                    (convert before
                             (append default-options
-                                    '(:add-current-date nil)))))))
+                                    '(:add-current-date nil
+                                      :use-sidenotes t)))))))
 
 (ert-deftest org-hugo-sidenotes-test/sidenote-shortcode ()
   (let* ((shortcode "marginnote")
@@ -51,6 +52,7 @@
                    (convert before
                             (append default-options
                                     '(:add-current-date nil
+                                      :use-sidenotes t
                                       :sidenote-shortcode "marginnote")))))))
 
 (ert-deftest org-hugo-sidenotes-test/disable-sidenotes ()
